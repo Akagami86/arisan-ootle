@@ -1,0 +1,21 @@
+[workspace]
+
+[package]
+name = "arisan_template"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Arisan Rahasia — a private rotating savings circle (ROSCA) template for Tari Ootle"
+
+[dependencies]
+tari_template_lib = "0.41"
+
+[profile.release]
+opt-level = 's'     # Optimize for size.
+lto = true          # Enable Link Time Optimization.
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic.
+strip = "debuginfo" # Strip debug info.
+
+[lib]
+crate-type = ["cdylib"]

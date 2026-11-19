@@ -1,0 +1,10 @@
+# Rust build artifacts
+target/
+**/target/
+
+# Local wallet daemon data (NEVER commit — holds testnet keys)
+walletd-esme/
+
+# OS / editor noise
+.DS_Store
+*.swp

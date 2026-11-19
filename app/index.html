@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arisan Rahasia — Private Arisan (ROSCA) on Tari Ootle · Walletless Demo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="sim-banner" role="note">
+  <strong>SIMULATION</strong> — This page mirrors the <em>ArisanCircle</em> Tari Ootle template
+  (Rust, in this repository) step for step in your browser.
+  <strong>No live on-chain transactions happen here</strong> — no wallet, no keys, no real TARI.
+  Every rule enforced below is the template's own rule, with the template's own rejection messages.
+</div>
+
+<header class="hero">
+  <h1>Arisan Rahasia</h1>
+  <p class="tagline">A private <em>arisan</em> (rotating savings circle) on Tari Ootle:
+  contribute together, the payout order stays sealed, only this round's winner is revealed.</p>
+</header>
+
+<main>
+  <section class="card story">
+    <h2>The scene</h2>
+    <p>
+      <strong>Ibu Sari</strong> runs the neighbourhood (RT) arisan in Jakarta. Every month,
+      <strong>10 members</strong> each put in <strong>Rp200.000</strong>. In the old way, everyone
+      knows whose turn is next — those still waiting get pressured, and whoever just received
+      the pot gets chased for loans.
+    </p>
+    <p>
+      In Arisan Rahasia the contributions go into a shared vault, and before the first round
+      Ibu Sari <strong>seals the whole payout rotation</strong> as one SHA-256 commitment per round.
+      The order can never be changed afterwards — but nobody can see it either. Each round,
+      only that round's winner is revealed, after everyone has contributed.
+    </p>
+    <p class="units">
+      On-chain unit: <strong>TARI</strong>. In this demo each member contributes
+      <strong>200 TARI</strong> per round (the story's Rp200.000), so each round's pot is
+      <strong>2.000 TARI</strong> (the story's Rp2.000.000). Demo wallets start with 2.000 TARI —
+      exactly ten rounds of contributions.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Guided walkthrough <span class="hint">(±4 minutes — follow the checklist)</span></h2>
+    <ol id="checklist" class="checklist"></ol>
+    <div class="statusbar">
+      <span>Phase: <strong id="st-phase">—</strong></span>
+      <span>Round: <strong id="st-round">—</strong></span>
+      <span>Vault (pot): <strong id="st-pot">—</strong></span>
+      <span>Admin / treasurer: <strong id="st-admin">Ibu Sari</strong></span>
+    </div>
+    <div id="actions" class="actions"></div>
+    <div id="reveal-box" class="reveal-box" hidden></div>
+  </section>
+
+  <section class="card">
+    <h2>Members</h2>
+    <div id="members" class="members"></div>
+  </section>
+
+  <section class="card" id="commitments-card" hidden>
+    <h2>Sealed draw — one commitment per round</h2>
+    <p>
+      These hashes are public from the moment the draw is sealed:
+      <code>commitment = sha256(winner_public_key || salt)</code>.
+      They prove the order was fixed up-front — and reveal nothing about who wins which round.
+      The winner and salt behind each hash are only ever shown in that round's reveal step.
+    </p>
+    <ol id="commitments" class="commitments"></ol>
+  </section>
+
+  <section class="card">
+    <h2>Try to break it</h2>
+    <p>The template rejects invalid actions. Try them — the simulation answers with the
+    template's own assertion messages, and nothing about the circle changes.</p>
+    <div class="actions">
+      <button data-break="double" class="btn warn">Contribute twice in one round</button>
+      <button data-break="amount" class="btn warn">Contribute the wrong amount (150 TARI)</button>
+      <button data-break="outsider" class="btn warn">Contribute as a non-member</button>
+      <button data-break="early" class="btn warn">Reveal the winner too early</button>
+      <button data-break="tamper" class="btn warn">Tamper: reveal a different winner</button>
+      <button data-break="claim" class="btn warn">Claim the payout as a non-winner</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Event log</h2>
+    <ol id="log" class="log"></ol>
+  </section>
+
+  <section class="card limits">
+    <h2>Honest limits</h2>
+    <ul>
+      <li><strong>The admin knows the order.</strong> Ibu Sari (the treasurer) generates the
+      rotation and the salts off-chain. The on-chain commitments guarantee she cannot
+      <em>change</em> the order after sealing it — but she does know it. A fully trustless
+      draw is future work.</li>
+      <li><strong>The vault balance is public</strong>, as with other Ootle vaults. What stays
+      hidden is the payout order, and each round's winner until their turn arrives.</li>
+      <li><strong>This demo is a simulation.</strong> Member "public keys", salts and balances
+      here are demo values computed in your browser; the real template uses account owner
+      Ristretto keys and real TARI buckets, enforced by the Ootle engine
+      (22 engine tests in <code>tests/</code> cover the same rules on-chain).</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Arisan Rahasia — Tari November Build Contest: MVP ·
+    Template: Rust / <code>tari_template_lib 0.41</code> · MIT License ·
+    Mechanism explained in <code>docs/MECHANISM.md</code></p>
+  </footer>
+</main>
+
+<script src="arisan.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
